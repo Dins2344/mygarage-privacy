@@ -24,9 +24,9 @@
 <body>
 <main>
   <h1>MyGarage Privacy Policy</h1>
-  <p class="meta">Effective 6 November 2026</p>
+  <p class="meta">Effective 11 November 2026</p>
 
-  <p>This policy explains how the MyGarage Android app, made by DC Techs, handles your information. MyGarage has no accounts and no server of ours. What you enter stays on your phone, and DC Techs cannot see it.</p>
+  <p>This policy explains how the MyGarage Android app, made by DC Techs, handles your information. Signing in is optional. If you do not sign in, MyGarage has no account and sends nothing to us: what you enter stays on your phone, and DC Techs cannot see it. If you choose to sign in with Google, your records and files are copied to our server so you can restore them on a new phone. This policy covers both cases.</p>
 
   <h2>Who we are</h2>
   <p>MyGarage is developed by DC Techs. For any privacy question or request, email <a href="mailto:dinson.cd@gmail.com">dinson.cd@gmail.com</a>.</p>
@@ -41,42 +41,90 @@
     <li>Service, fuel and expense records</li>
     <li>Reminders and their schedules</li>
   </ul>
-  <p>This information is used only to show your records, suggest document dates, calculate figures such as mileage, and send your reminders. We do not collect it, and we do not sell or share it. The app has no advertising and no analytics of our own.</p>
+  <p>This information is used only to show your records, suggest document dates, calculate figures such as mileage, and send your reminders. We do not sell or share it. The app has no advertising and no analytics of our own.</p>
+
+  <h2>Signing in and cloud sync (optional)</h2>
+  <p>You can sign in with your Google account to back up your records and sync them between phones. This is off until you sign in. If you never sign in, nothing in this section applies to you.</p>
+  <p>When you sign in:</p>
+  <ul>
+    <li>The app sends the Google ID token to the MyGarage server, at dctech.space, over HTTPS. The server checks it with Google.</li>
+    <li>The server stores your Google account id, your email address and the name on your Google account. It uses them to know which cloud copy is yours and, if you share a garage, to show your name on an invite. We do not receive your Google password.</li>
+    <li>Your records (vehicles, documents, reminders, service, fuel and expense entries, and the rest of what is listed above) are encrypted on your phone and sent to the server, which keeps them in a Neon Postgres database. The database also holds, in plain form, the type of each record, a random record id and the time it was last changed.</li>
+    <li>Your files (document scans, PDFs and vehicle photos) are encrypted on your phone and stored in Cloudflare R2. Each file is stored under a random id, with no name, registration number or document type.</li>
+    <li>The server also keeps the size of each file and whether its upload finished, so it can apply the storage limits.</li>
+    <li>For security and to prevent abuse, the server logs technical events, including your MyGarage account id and, when a sign-in or request fails, the IP address it came from. It also counts requests per IP address to slow down repeated attempts. Logs are kept for up to 30 days.</li>
+    <li>Cloud storage is limited to 25 MB per file and 1 GB per account. A file over a limit stays on your phone only. Files in a shared garage count towards the owner's limit.</li>
+  </ul>
+  <p>Sync changes only what is copied. The records on your phone remain yours, and edits on one phone reach your other phones when they sync. We use your email address to identify your account, and to match invites to garages shared with you. We do not send you marketing.</p>
+
+  <h2>Sharing a garage (optional)</h2>
+  <p>If you are signed in, you can share a garage with other people, such as family. This is off until you invite someone. If you never share a garage and nobody invites you, nothing in this section applies to you.</p>
+  <ul>
+    <li><strong>Invites.</strong> You type the email address of the person you invite and choose their access: can edit, or view only. The app sends the address, the garage name and the access to the MyGarage server, which emails the invite. The email goes through Gmail, so Google handles it as our email provider, under Google's own terms. It is sent from the name "MyGarage".</li>
+    <li><strong>What an invite stores.</strong> The server keeps the invited email address (in lower case), the garage name, the inviter's name (the name on your Google account, or your email address if it has none), the access level and when the invite expires. The link in the email is stored only as a hash, not in a form that can be used.</li>
+    <li><strong>When an invite is deleted.</strong> The invite is deleted when it is accepted, declined or cancelled. An invite nobody answers stops working 12 hours after it is sent. Its record, with the invited email address, is deleted when the next invite is sent by anyone after it has been expired for 3 days. We do not promise a fixed deletion time.</li>
+    <li><strong>Who can accept.</strong> The invite link works only for the Google account whose email address was invited. It also shows inside the app for that account.</li>
+    <li><strong>Members.</strong> When someone accepts, the server records the garage, the person's account and their access in a list of members. People with can edit access can add, change and delete records in that garage. People with view only access can see everything in it and change nothing. Only the owner can invite people, change access, remove people or delete the garage.</li>
+    <li><strong>What members see.</strong> Everyone with access sees the garage's vehicles, documents, scans, reminders and other records, and who owns the garage. Each member's phone keeps a copy until they leave the garage or are removed. Reminders for the garage are shown on every member's phone. A view only member can turn them off on their own phone.</li>
+    <li><strong>Encryption.</strong> A shared garage's records and files are encrypted on the phone with a key made for that garage, before they are uploaded. Like your personal key, the garage key is held by the server, wrapped with our master key, and each member's phone fetches it after the server checks their access. This is not end-to-end encryption, for the reasons given above.</li>
+    <li><strong>Leaving and removal.</strong> A member can leave a garage, and the owner can remove a member. The garage is then removed from that person's phone, including its records and scans, the next time the app syncs. Signing out of the app also removes every shared garage from the phone. If you sign in again, garages you own and garages shared with you come back from the server.</li>
+    <li><strong>Deleting a shared garage.</strong> The owner can delete a shared garage. Its records and files are then deleted from our server for everyone, its members and invites are removed, and each member's phone removes it at its next sync.</li>
+    <li><strong>Deleting an account.</strong> Deleting an account deletes the shared garages that account owns, for everyone in them, along with their records, files, members and invites. It also removes that account from every garage shared with it. Records that person added to someone else's garage stay in that garage.</li>
+  </ul>
+  <p>Only share a garage with people you trust: they can see everything in it.</p>
+
+  <h2>Encryption, and what it does not mean</h2>
+  <ul>
+    <li>Records and files are encrypted on your phone with AES-256-GCM before they are uploaded. Data is also protected in transit by HTTPS.</li>
+    <li>The key is created for you by the server, which keeps it wrapped (encrypted) with a master key held by DC Techs. Your phone fetches the key over HTTPS after you sign in and keeps it in Android's secure storage.</li>
+    <li>Because the server holds these keys, this is not end-to-end encryption. A database or storage leak on its own would show only encrypted data, but DC Techs, as the operator, could technically decrypt your data. We do not look at it, and we use it only to run sync.</li>
+  </ul>
 
   <h2>Permissions</h2>
   <ul>
-    <li><strong>Camera:</strong> to take vehicle photos and scan documents. Photos stay on your phone unless you share them.</li>
+    <li><strong>Camera:</strong> to take vehicle photos and scan documents. Photos stay on your phone unless you share them or sign in and sync.</li>
     <li><strong>Notifications:</strong> to show renewal and service reminders. These are scheduled on your phone, not sent from a server.</li>
-    <li><strong>Internet:</strong> used by the Google components described below, and to open DigiLocker when you ask. The app does not use it to send your records anywhere.</li>
+    <li><strong>Internet:</strong> used for sign-in and cloud sync if you choose them, by the Google components described below, and to open DigiLocker when you ask. Without sign-in, the app does not use it to send your records anywhere.</li>
   </ul>
   <p>Photos and files are chosen through Android's system pickers, so the app sees only the items you pick. The app does not use your location, microphone or contacts.</p>
 
   <h2>Google services</h2>
   <p>MyGarage uses Google's ML Kit to read dates from scans, and the document scanner in Google Play services to capture pages. Google states that ML Kit processes images and text on your device and does not send them or the results to its servers.</p>
   <p>Google's components do send technical data to Google over an encrypted connection, for diagnostics and usage analytics. This includes device model and Android version, app name and version, identifiers for the app installation or device, performance and error information, image format and size, and which features were used. They may also contact Google to download updates. DC Techs does not receive this data. Google's handling of it is described in the <a href="https://developers.google.com/ml-kit/android-data-disclosure">ML Kit data disclosure</a> and the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</p>
-  <p>Google Play, which installs the app, handles data under its own terms.</p>
+  <p>If you sign in, Google Sign-In also handles that step under Google's own terms. Google Play, which installs the app, handles data under its own terms.</p>
 
   <h2>Android backup</h2>
-  <p>Your records and scans are excluded from Android's cloud backup. App settings are included, and these can hold the text of scheduled reminders, which may show a document type and registration number. If you have device backup turned on, this text may be saved to your own Google account. You can turn this off in your phone's backup settings.</p>
-  <p>Because your records and scans are not backed up, they cannot be restored if you lose your phone, change phones or uninstall the app.</p>
+  <p>MyGarage turns off Android's automatic cloud backup. Nothing from the app is copied to your Google account by Android backup.</p>
+  <p>If you do not sign in, your records and scans cannot be restored if you lose your phone, change phones or uninstall the app. If you sign in, you can restore them by signing in again on the new phone.</p>
 
   <h2>When your information leaves the app</h2>
-  <p>This happens only when you choose it. If you tap Share on a document, Android's share sheet sends it to the app you pick, and that app's own privacy terms then apply. Open in DigiLocker opens the DigiLocker website, which is not run by us.</p>
+  <p>Without sign-in, this happens only when you choose it. If you tap Share on a document, Android's share sheet sends it to the app you pick, and that app's own privacy terms then apply. Open in DigiLocker opens the DigiLocker website, which is not run by us.</p>
+  <p>With sign-in, your encrypted records and files also go to our server and storage as described above. If you share a garage, its records and files also go to the people you invite, and an invite email goes to the address you type, through Gmail. We do not give your data to anyone else. They are held by the services we use to run sync: <a href="https://neon.com/privacy-policy">Neon</a> (database), <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare</a> (file storage), and Amazon Web Services (EC2), which hosts the server. Each handles data under its own terms.</p>
 
   <h2>How your information is protected</h2>
   <ul>
-    <li>Your records are kept in an encrypted database. Its key is protected by the Android Keystore.</li>
-    <li>Scans and photos are kept in the app's private storage, which Android keeps closed to other apps. They are not separately encrypted.</li>
+    <li>On your phone, your records are kept in an encrypted database. Its key is protected by the Android Keystore.</li>
+    <li>On your phone, scans and photos are kept in the app's private storage, which Android keeps closed to other apps. They are not separately encrypted there.</li>
+    <li>In the cloud, records and files are encrypted as described above, with your key for personal records and the garage's key for shared ones.</li>
     <li>Use a screen lock, because anyone who can unlock your phone can open the app.</li>
   </ul>
 
   <h2>Keeping and deleting your information</h2>
-  <p>Your information stays on your phone until you delete it. We hold no copy, so we cannot delete it for you or recover it.</p>
+  <p>On your phone, your information stays until you delete it.</p>
   <ul>
     <li>When you delete a document, photo or vehicle, its saved scans and photos are deleted from the app's storage straight away.</li>
     <li>Temporary copies made while scanning or importing can stay in the app's cache until Android clears it or you clear the app's storage.</li>
     <li>Deleted records are hidden and can stay in the encrypted database until you remove the app's data.</li>
-    <li>To remove everything, uninstall the app or clear its storage in your phone's settings. This cannot be undone.</li>
+    <li>To remove everything on the phone, uninstall the app or clear its storage in your phone's settings. This cannot be undone.</li>
+  </ul>
+  <p>In the cloud, your data stays until you delete your account.</p>
+  <ul>
+    <li><strong>Delete your account in the app:</strong> open Settings, then Account, then "Delete account and cloud data". The server deletes your stored files, then your account, sign-in tokens, synced records and file entries from our live database and file storage straight away. If you own shared garages, they are deleted for everyone in them, and the app warns you first that garages you share are deleted for everyone in them. Your memberships in other people's garages are removed. Copies in our providers' backups expire on their schedule (up to 30 days). This cannot be undone. Before it starts, the app asks whether to keep or remove the copy on your phone.</li>
+    <li><strong>Deleting a record or file in the app</strong> does not remove it from the cloud at once. A deleted record stays in the cloud as an encrypted entry (its id, the time it was deleted and its last encrypted version) until you delete your account. A deleted file is removed from cloud storage.</li>
+    <li><strong>Signing out</strong> does not delete your cloud copy. It asks whether to keep or remove your personal data on your phone, and always removes shared garages from the phone.</li>
+    <li><strong>No app?</strong> Email <a href="mailto:dinson.cd@gmail.com">dinson.cd@gmail.com</a> from the address on your account, and we will delete your cloud data within 30 days. The <a href="delete-account.html">account deletion page</a> has the steps.</li>
+    <li>Sign-in tokens expire on their own after about 90 days.</li>
+    <li>Server logs are deleted on their own schedule, see "Signing in and cloud sync" above.</li>
   </ul>
   <p>You can view and correct your information in the app at any time.</p>
 
@@ -84,10 +132,10 @@
   <p>MyGarage is meant for adults who own or manage vehicles. It is not directed at anyone under 18.</p>
 
   <h2>Not a government app</h2>
-  <p>MyGarage is not affiliated with any government body, DigiLocker or Parivahan.</p>
+  <p>MyGarage is not affiliated with any government body, DigiLocker or Parivahan. Scans in the app are convenience copies, not legal documents. The legal copies are the ones in DigiLocker or mParivahan.</p>
 
   <h2>Changes to this policy</h2>
-  <p>If the way the app handles information changes, we will update this page and its effective date. If we add features such as sign-in or cloud backup, we will update this policy before they are released.</p>
+  <p>If the way the app handles information changes, we will update this page and its date.</p>
 </main>
 </body>
 </html>
