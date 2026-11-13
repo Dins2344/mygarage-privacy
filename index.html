@@ -24,7 +24,7 @@
 <body>
 <main>
   <h1>MyGarage Privacy Policy</h1>
-  <p class="meta">Effective 11 November 2026</p>
+  <p class="meta">Effective 13 November 2026</p>
 
   <p>This policy explains how the MyGarage Android app, made by DC Techs, handles your information. Signing in is optional. If you do not sign in, MyGarage has no account and sends nothing to us: what you enter stays on your phone, and DC Techs cannot see it. If you choose to sign in with Google, your records and files are copied to our server so you can restore them on a new phone. This policy covers both cases.</p>
 
@@ -38,7 +38,7 @@
     <li>Vehicle details, such as the registration number, make, model, chassis and engine numbers, owner name, financier, purchase details and odometer readings</li>
     <li>Document details, such as type, number, issuer, dates, amounts and notes</li>
     <li>Scans and files of your documents, which may show personal details such as your name, address or photo, and vehicle photos</li>
-    <li>Service, fuel and expense records</li>
+    <li>Service, fuel and expense records, and the bills and receipts you attach to them</li>
     <li>Reminders and their schedules</li>
   </ul>
   <p>This information is used only to show your records, suggest document dates, calculate figures such as mileage, and send your reminders. We do not sell or share it. The app has no advertising and no analytics of our own.</p>
@@ -50,7 +50,7 @@
     <li>The app sends the Google ID token to the MyGarage server, at dctech.space, over HTTPS. The server checks it with Google.</li>
     <li>The server stores your Google account id, your email address and the name on your Google account. It uses them to know which cloud copy is yours and, if you share a garage, to show your name on an invite. We do not receive your Google password.</li>
     <li>Your records (vehicles, documents, reminders, service, fuel and expense entries, and the rest of what is listed above) are encrypted on your phone and sent to the server, which keeps them in a Neon Postgres database. The database also holds, in plain form, the type of each record, a random record id and the time it was last changed.</li>
-    <li>Your files (document scans, PDFs and vehicle photos) are encrypted on your phone and stored in Cloudflare R2. Each file is stored under a random id, with no name, registration number or document type.</li>
+    <li>Your files (document scans, bills, PDFs and vehicle photos) are encrypted on your phone and stored in Cloudflare R2. Each file is stored under a random id, with no name, registration number or document type.</li>
     <li>The server also keeps the size of each file and whether its upload finished, so it can apply the storage limits.</li>
     <li>For security and to prevent abuse, the server logs technical events, including your MyGarage account id and, when a sign-in or request fails, the IP address it came from. It also counts requests per IP address to slow down repeated attempts. Logs are kept for up to 30 days.</li>
     <li>Cloud storage is limited to 25 MB per file and 1 GB per account. A file over a limit stays on your phone only. Files in a shared garage count towards the owner's limit.</li>
@@ -82,14 +82,14 @@
 
   <h2>Permissions</h2>
   <ul>
-    <li><strong>Camera:</strong> to take vehicle photos and scan documents. Photos stay on your phone unless you share them or sign in and sync.</li>
+    <li><strong>Camera:</strong> to take vehicle photos and scan documents and bills. Photos stay on your phone unless you share them or sign in and sync.</li>
     <li><strong>Notifications:</strong> to show renewal and service reminders. These are scheduled on your phone, not sent from a server.</li>
     <li><strong>Internet:</strong> used for sign-in and cloud sync if you choose them, by the Google components described below, and to open DigiLocker when you ask. Without sign-in, the app does not use it to send your records anywhere.</li>
   </ul>
   <p>Photos and files are chosen through Android's system pickers, so the app sees only the items you pick. The app does not use your location, microphone or contacts.</p>
 
   <h2>Google services</h2>
-  <p>MyGarage uses Google's ML Kit to read dates from scans, and the document scanner in Google Play services to capture pages. Google states that ML Kit processes images and text on your device and does not send them or the results to its servers.</p>
+  <p>MyGarage uses Google's ML Kit to read details from your scans on your phone (dates, and an insurance policy's number, insurer and premium) and the date, time and total from bills, and the document scanner in Google Play services to capture pages. Google states that ML Kit processes images and text on your device and does not send them or the results to its servers.</p>
   <p>Google's components do send technical data to Google over an encrypted connection, for diagnostics and usage analytics. This includes device model and Android version, app name and version, identifiers for the app installation or device, performance and error information, image format and size, and which features were used. They may also contact Google to download updates. DC Techs does not receive this data. Google's handling of it is described in the <a href="https://developers.google.com/ml-kit/android-data-disclosure">ML Kit data disclosure</a> and the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</p>
   <p>If you sign in, Google Sign-In also handles that step under Google's own terms. Google Play, which installs the app, handles data under its own terms.</p>
 
@@ -112,7 +112,7 @@
   <h2>Keeping and deleting your information</h2>
   <p>On your phone, your information stays until you delete it.</p>
   <ul>
-    <li>When you delete a document, photo or vehicle, its saved scans and photos are deleted from the app's storage straight away.</li>
+    <li>When you delete a document, photo, vehicle, or a service, fuel or expense entry, its saved scans, bills and photos are deleted from the app's storage straight away.</li>
     <li>Temporary copies made while scanning or importing can stay in the app's cache until Android clears it or you clear the app's storage.</li>
     <li>Deleted records are hidden and can stay in the encrypted database until you remove the app's data.</li>
     <li>To remove everything on the phone, uninstall the app or clear its storage in your phone's settings. This cannot be undone.</li>
